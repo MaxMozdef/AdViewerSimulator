@@ -2,26 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Advertisements;
+
 
 public class MainScript : MonoBehaviour
 {
     [SerializeField] private GameObject DiscriptionPanelStart;
-    private int EnterTheGame;
-    
+    [SerializeField] private Text GameScoreText;
+    int EnterTheGame;    
+    int GameScore;
+    string gameId = "123456";
+    bool testMode = true;   
 
 
     void Start()
     {
-        EnterTheGame = PlayerPrefs.GetInt("EnterTheGameName");        
-        EnterTheGame++;
-        PlayerPrefs.SetInt("EnterTheGameName", EnterTheGame);       
+        GameScore -= 1;
+        EnterTheGameCounter();        
+        GameScoreCount();
+        Advertisement.Initialize(gameId, testMode);
     }
 
     
     void Update()
     {
         
-
+        GameScoreText.text = GameScore + "";
+        
         if (EnterTheGame < 3)
         {
             DiscriptionPanelStart.SetActive(true);
@@ -32,7 +39,20 @@ public class MainScript : MonoBehaviour
         }
     }
 
-    
+    private void GameScoreCount()
+    {
+        GameScore = PlayerPrefs.GetInt("GameScore");
+        GameScore++;        
+        PlayerPrefs.SetInt("GameScore", GameScore);     
+   
+    }
+
+    private void EnterTheGameCounter()
+    {
+        EnterTheGame = PlayerPrefs.GetInt("EnterTheGameName");
+        EnterTheGame++;
+        PlayerPrefs.SetInt("EnterTheGameName", EnterTheGame);
+    }
 
     public void ExitGame()
     {
@@ -42,4 +62,18 @@ public class MainScript : MonoBehaviour
     {
         EnterTheGame += 3;
     }
+
+    public void WatchAds()
+    {
+        GameScoreCount();
+        if (Advertisement.IsReady())
+        {
+            Advertisement.Show();
+        }
+        else
+        {
+            Debug.Log("все пропало");
+        }
+    }
+    
 }
