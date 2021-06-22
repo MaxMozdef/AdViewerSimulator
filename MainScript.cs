@@ -57,6 +57,7 @@ public class MainScript : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
+        Debug.Log("Exit)");
     }
     public void OkGI()
     {
