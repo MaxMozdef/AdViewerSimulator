@@ -14,7 +14,7 @@ public class MainScript : MonoBehaviour
     [SerializeField] private Text GameScoreText;
     int EnterTheGame;    
     int GameScore;
-    string gameId = "123456";
+    string gameId = "4169001";
     bool testMode = true;
     string leaderBoard = "CgkI5p7O0JUeEAIQAQ";
 
