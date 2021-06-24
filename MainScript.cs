@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Advertisements;
+using GooglePlayGames;
+using GooglePlayGames.BasicApi;
+using UnityEngine.SocialPlatforms;
 
 
 public class MainScript : MonoBehaviour
@@ -12,7 +15,8 @@ public class MainScript : MonoBehaviour
     int EnterTheGame;    
     int GameScore;
     string gameId = "123456";
-    bool testMode = true;   
+    bool testMode = true;
+    string leaderBoard = "CgkI5p7O0JUeEAIQAQ";
 
 
     void Start()
@@ -21,8 +25,22 @@ public class MainScript : MonoBehaviour
         EnterTheGameCounter();        
         GameScoreCount();
         Advertisement.Initialize(gameId, testMode);
+        Initialize();
     }
 
+    void Initialize ()
+    {
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
+            .RequestServerAuthCode(false).Build();
+        PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.Activate();
+        SigninGooglePlay();
+    }
+
+    void SigninGooglePlay()
+    {
+        PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptOnce, (success) => { });
+    }
     
     void Update()
     {
@@ -43,8 +61,8 @@ public class MainScript : MonoBehaviour
     {
         GameScore = PlayerPrefs.GetInt("GameScore");
         GameScore++;        
-        PlayerPrefs.SetInt("GameScore", GameScore);     
-   
+        PlayerPrefs.SetInt("GameScore", GameScore);
+        Social.ReportScore(GameScore, leaderBoard, (bool success) => { });   
     }
 
     private void EnterTheGameCounter()
@@ -57,7 +75,7 @@ public class MainScript : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
-        Debug.Log("Exit)");
+        PlayGamesPlatform.Instance.SignOut();
     }
     public void OkGI()
     {
@@ -75,6 +93,11 @@ public class MainScript : MonoBehaviour
         {
             Debug.Log("все пропало");
         }
+    }
+
+    public void ShowLeaderBoard ()
+    {
+        Social.ShowLeaderboardUI();
     }
     
 }
