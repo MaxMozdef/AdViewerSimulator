@@ -11,7 +11,8 @@ using UnityEngine.SocialPlatforms;
 public class MainScript : MonoBehaviour
 {
     [SerializeField] private GameObject DiscriptionPanelStart;
-    [SerializeField] private GameObject Shop;
+    [SerializeField] private GameObject Shop;    
+    [SerializeField] private GameObject MainUI;    
     [SerializeField] private Text GameScoreText;
     int EnterTheGame;    
     int GameScore;
@@ -28,7 +29,8 @@ public class MainScript : MonoBehaviour
         GameScore -= 1;
         EnterTheGameCounter();        
         GameScoreCount();
-        Advertisement.Initialize(gameId, testMode);           
+        Advertisement.Initialize(gameId, testMode);
+        
     }
 
     void Initialize ()
@@ -98,6 +100,8 @@ public class MainScript : MonoBehaviour
         }
     }
 
+    
+
     public void ShowLeaderBoard ()
     {
         Social.ShowLeaderboardUI();
@@ -105,12 +109,13 @@ public class MainScript : MonoBehaviour
     
     public void GoToShop()
     {
-        Shop.SetActive(true);      
-
+        Shop.SetActive(true);
+        MainUI.SetActive(false);
     }
 
     public void ExitShop ()
     {
         Shop.SetActive(false);
-    }
+        MainUI.SetActive(true);
+    }    
 }
