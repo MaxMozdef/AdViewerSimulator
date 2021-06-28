@@ -6,6 +6,7 @@ using UnityEngine.Advertisements;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using UnityEngine.SocialPlatforms;
+using UnityEngine.Purchasing;
 
 
 public class MainScript : MonoBehaviour
@@ -18,19 +19,23 @@ public class MainScript : MonoBehaviour
     int GameScore;
     string gameId = "4186413";
     bool testMode = true;
-    string leaderBoard = "CgkI5p7O0JUeEAIQAQ";   
+    string leaderBoard = "CgkI5p7O0JUeEAIQAQ";
+
+    string plus100Points = "com.carpet.adviewersimulator.buyonehundredpointsb";
+    string plus333Points = "com.carpet.adviewersimulator.buythreehundredthirtythreepointsb";
+    string plus999Points = "com.carpet.adviewersimulator.buyninehundredandninetynineb";
+    string plus2kPoints = "com.carpet.adviewersimulator.buytwokb";
+    string plusGift = "com.carpet.adviewersimulator.freemoney";
 
     
 
     void Start()
     {
         Initialize();
-        Shop.SetActive(false);
-        GameScore -= 1;
-        EnterTheGameCounter();        
-        GameScoreCount();
         Advertisement.Initialize(gameId, testMode);
-        
+        Shop.SetActive(false);        
+        EnterTheGameCounter();        
+        GameScoreCount();        
     }
 
     void Initialize ()
@@ -60,6 +65,7 @@ public class MainScript : MonoBehaviour
         {
             DiscriptionPanelStart.SetActive(false);
         }
+        
     }
 
     private void GameScoreCount()
@@ -75,6 +81,51 @@ public class MainScript : MonoBehaviour
         EnterTheGame = PlayerPrefs.GetInt("EnterTheGameName");
         EnterTheGame++;
         PlayerPrefs.SetInt("EnterTheGameName", EnterTheGame);
+    }
+
+    public void OnPurcheseComplite(Product product)
+    {
+        if (product.definition.id == plus100Points)
+        {
+            GameScore = PlayerPrefs.GetInt("GameScore");
+            GameScore += 100;
+            PlayerPrefs.SetInt("GameScore", GameScore);
+            Debug.Log("buy 100 points");
+        }
+
+        if (product.definition.id == plus333Points)
+        {
+            GameScore = PlayerPrefs.GetInt("GameScore");
+            GameScore += 333;
+            PlayerPrefs.SetInt("GameScore", GameScore);
+            Debug.Log("buy 333 points");
+        }
+        
+        if (product.definition.id == plus999Points)
+        {
+            GameScore = PlayerPrefs.GetInt("GameScore");
+            GameScore += 999;
+            PlayerPrefs.SetInt("GameScore", GameScore);
+            Debug.Log("buy 999 points");
+        }
+        
+        if (product.definition.id == plus2kPoints)
+        {
+            GameScore = PlayerPrefs.GetInt("GameScore");
+            GameScore += 1999;
+            PlayerPrefs.SetInt("GameScore", GameScore);
+            Debug.Log("buy 2k points");
+        }
+        
+        if (product.definition.id == plusGift)
+        {
+            Debug.Log("Thanks =)");
+        }
+    }
+
+    public void OnPurcheseFailed(Product product, PurchaseFailureReason reason)
+    {
+        Debug.Log(reason);
     }
 
     public void ExitGame()
