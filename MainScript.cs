@@ -27,29 +27,45 @@ public class MainScript : MonoBehaviour
     string plus2kPoints = "com.carpet.adviewersimulator.buytwokb";
     string plusGift = "com.carpet.adviewersimulator.freemoney";
 
-    
-
-    void Start()
+    private void Awake()
     {
         Initialize();
         Advertisement.Initialize(gameId, testMode);
+        leaderBoardScore();
+    }
+
+    void Start()
+    {
+        
         Shop.SetActive(false);        
         EnterTheGameCounter();        
         GameScoreCount();        
     }
 
-    void Initialize ()
+    void Initialize()
     {
         PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
-            .RequestServerAuthCode(false).Build();
+            .EnableSavedGames()
+            .RequestEmail()
+            .RequestServerAuthCode(false)
+            .Build();
         PlayGamesPlatform.InitializeInstance(config);
+        PlayGamesPlatform.DebugLogEnabled = true;
         PlayGamesPlatform.Activate();
         SigninGooglePlay();
     }
 
     void SigninGooglePlay()
     {
-        PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptOnce, (success) => { });
+        PlayGamesPlatform.Instance.Authenticate(SignInInteractivity.CanPromptAlways, (result) => { });
+    }
+
+    public void leaderBoardScore()
+    {
+        if (Social.localUser.authenticated)
+        {
+            Social.ReportScore(GameScore, leaderBoard, (bool success) => { });
+        }
     }
     
     void Update()
@@ -131,7 +147,7 @@ public class MainScript : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
-        PlayGamesPlatform.Instance.SignOut();
+        
     }
     public void OkGI()
     {
